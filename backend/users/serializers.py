@@ -51,3 +51,31 @@ class UserSerializer(serializers.ModelSerializer):
             user.set_password(password)
             user.save()
         return user
+
+
+class RegisterUserSerializer(serializers.ModelSerializer):
+    """
+    Serializador para el registro público de nuevos usuarios gamers (manual pág. 33).
+    Garantiza que la contraseña no se retorne en la respuesta ('write_only': True)
+    y valida la longitud mínima de seguridad.
+    """
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'gamertag']
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'gamertag': {'required': False}
+        }
+
+    def validate_password(self, value):
+        if len(value) < 8:
+            raise serializers.ValidationError("La contraseña debe tener al menos 8 caracteres.")
+        return value
+
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        user = super().create(validated_data)
+        if password:
+            user.set_password(password)
+            user.save()
+        return user

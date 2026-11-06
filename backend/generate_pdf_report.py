@@ -1,7 +1,7 @@
 """
-Script para generar el reporte profesional en PDF con ReportLab.
-Incluye metadatos, enlace al repositorio, análisis de requerimientos,
-explicación de correcciones de seguridad y las 4 capturas solicitadas.
+Generador del Documento PDF Oficial de Entrega para:
+RA2 Django + React con Autenticación y APIs (Unidades 2 y 3)
+Manual Páginas 13 a 35 + API de Terceros + Consumo SOAP.
 """
 
 import os
@@ -9,18 +9,18 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Image as RLImage, Table, TableStyle, PageBreak, KeepTogether, HRFlowable
+    SimpleDocTemplate, Paragraph, Spacer, Image as RLImage, Table, TableStyle, PageBreak
 )
 from reportlab.pdfgen import canvas
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SCREENSHOTS_DIR = os.path.join(BASE_DIR, "..", "screenshots")
-PDF_OUTPUT_PATH = os.path.join(BASE_DIR, "..", "Reporte_Proyecto_PixelVault_Django.pdf")
-PDF_ROOT_COPY = os.path.join(BASE_DIR, "..", "..", "Reporte_Proyecto_PixelVault_Django.pdf")
+PDF_OUTPUT_PATH = os.path.join(BASE_DIR, "..", "Reporte_RA2_Django_React_SOAP.pdf")
+PDF_COPY_OLD = os.path.join(BASE_DIR, "..", "Reporte_Proyecto_PixelVault_Django.pdf")
+PDF_ROOT_COPY = os.path.join(BASE_DIR, "..", "..", "Reporte_RA2_Django_React_SOAP.pdf")
 
 
 class NumberedCanvas(canvas.Canvas):
-    """Canvas de dos pasadas para numerar páginas de forma dinámica."""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._saved_page_states = []
@@ -39,21 +39,19 @@ class NumberedCanvas(canvas.Canvas):
 
     def draw_page_decorations(self, page_count):
         self.saveState()
-        # Encabezado superior
         self.setFont("Helvetica-Bold", 8)
-        self.setFillColor(colors.HexColor("#4a5568"))
-        self.drawString(36, 762, "PIXELVAULT GAMING API — REPORTE DE PRÁCTICA BACKEND (MANUAL PÁG. 5-12)")
+        self.setFillColor(colors.HexColor("#334155"))
+        self.drawString(36, 762, "RA2 DJANGO + REACT CON AUTENTICACIÓN, API DE TERCEROS Y SOAP (UNIDADES 2 Y 3)")
         self.setFont("Helvetica", 8)
-        self.drawRightString(576, 762, "Desarrollo Web Integral (DWI) • Django & ReactJS")
+        self.drawRightString(576, 762, "PixelVault Gaming Platform • Manual Págs. 13-35")
         self.setStrokeColor(colors.HexColor("#cbd5e0"))
         self.setLineWidth(0.5)
         self.line(36, 756, 576, 756)
 
-        # Pie de página inferior
         self.line(36, 42, 576, 42)
         self.setFont("Helvetica", 8)
-        self.setFillColor(colors.HexColor("#718096"))
-        self.drawString(36, 30, "Proyecto Académico: Backend Django REST Framework + JWT + Swagger")
+        self.setFillColor(colors.HexColor("#64748b"))
+        self.drawString(36, 30, "Repositorio GitHub: https://github.com/juanZantillan13/Practica-4")
         self.drawRightString(576, 30, f"Página {self._pageNumber} de {page_count}")
         self.restoreState()
 
@@ -70,47 +68,34 @@ def build_pdf():
 
     styles = getSampleStyleSheet()
 
-    # Estilos tipográficos personalizados
     title_style = ParagraphStyle(
         'DocTitle',
         parent=styles['Heading1'],
         fontName='Helvetica-Bold',
-        fontSize=20,
-        leading=24,
-        textColor=colors.HexColor("#1a202c"),
-        spaceAfter=4
+        fontSize=18,
+        leading=22,
+        textColor=colors.HexColor("#0f172a"),
+        spaceAfter=3
     )
 
     subtitle_style = ParagraphStyle(
         'DocSubTitle',
         parent=styles['Normal'],
-        fontName='Helvetica',
-        fontSize=11,
-        leading=15,
+        fontName='Helvetica-Bold',
+        fontSize=10.5,
+        leading=14,
         textColor=colors.HexColor("#4f46e5"),
-        spaceAfter=12
+        spaceAfter=10
     )
 
     h1_style = ParagraphStyle(
         'SectionHeading',
         parent=styles['Heading2'],
         fontName='Helvetica-Bold',
-        fontSize=13,
-        leading=17,
+        fontSize=12,
+        leading=15,
         textColor=colors.HexColor("#1e293b"),
-        spaceBefore=10,
-        spaceAfter=6,
-        keepWithNext=True
-    )
-
-    h2_style = ParagraphStyle(
-        'SubSectionHeading',
-        parent=styles['Heading3'],
-        fontName='Helvetica-Bold',
-        fontSize=10.5,
-        leading=14,
-        textColor=colors.HexColor("#0f766e"),
-        spaceBefore=6,
+        spaceBefore=8,
         spaceAfter=4,
         keepWithNext=True
     )
@@ -119,54 +104,35 @@ def build_pdf():
         'BodyDark',
         parent=styles['Normal'],
         fontName='Helvetica',
-        fontSize=9,
-        leading=12.5,
+        fontSize=8.5,
+        leading=11.5,
         textColor=colors.HexColor("#334155")
-    )
-
-    code_style = ParagraphStyle(
-        'CodeSnippet',
-        parent=styles['Normal'],
-        fontName='Courier',
-        fontSize=8,
-        leading=10.5,
-        textColor=colors.HexColor("#0f172a")
-    )
-
-    badge_style = ParagraphStyle(
-        'Badge',
-        parent=styles['Normal'],
-        fontName='Helvetica-Bold',
-        fontSize=8,
-        leading=10,
-        textColor=colors.HexColor("#065f46")
     )
 
     story = []
 
     # ==========================
-    # ENCABEZADO Y METADATOS
+    # PÁGINA 1: PORTADA Y METADATOS
     # ==========================
-    story.append(Paragraph("🎮 PixelVault Gaming API — Reporte de Práctica", title_style))
-    story.append(Paragraph("Desarrollo Backend con Django, DRF, Swagger y Autenticación JWT (Manual Págs. 5 a 12)", subtitle_style))
+    story.append(Paragraph("🎮 RA2 Django + React con Autenticación y APIs", title_style))
+    story.append(Paragraph("Cierre de Unidades 2 y 3 — Manual Páginas 13 a 35 + API de Terceros + SOAP", subtitle_style))
 
-    # Tabla de Información General y Repositorio
     meta_data = [
         [
             Paragraph("<b>Proyecto:</b> PixelVault (Plataforma de Videojuegos)", body_style),
-            Paragraph("<b>Materia:</b> Desarrollo Full Stack (DWI)", body_style)
+            Paragraph("<b>Materia:</b> Desarrollo Full Stack (DWI) / Web Services", body_style)
         ],
         [
-            Paragraph("<b>Frameworks:</b> Django 6.1 • DRF 3.18 • SimpleJWT", body_style),
-            Paragraph("<b>Documentación:</b> Swagger OpenAPI (drf-yasg)", body_style)
+            Paragraph("<b>Backend:</b> Django 6.1 • DRF 3.18 • SimpleJWT • Zeep (SOAP)", body_style),
+            Paragraph("<b>Frontend:</b> React 18 • Vite • Semantic UI • Formik • SASS", body_style)
         ],
         [
-            Paragraph("<b>Campo Extra:</b> <code>gamertag</code> (Identidad Gamer)", body_style),
-            Paragraph("<b>Token Lifetime:</b> 2 horas (<code>ACCESS_TOKEN_LIFETIME</code>)", body_style)
+            Paragraph("<b>Web Services:</b> Propio (/auth/me/) • SOAP (CountryInfo WSDL)", body_style),
+            Paragraph("<b>API de Terceros:</b> DummyJSON Quotes API (en Dashboard)", body_style)
         ],
         [
             Paragraph("<b>Repositorio GitHub:</b> <font color='#2563eb'><u>https://github.com/juanZantillan13/Practica-4</u></font>", body_style),
-            Paragraph("<b>Estado de Seguridad:</b> 2 Vulnerabilidades Subsanadas ✅", badge_style)
+            Paragraph("<b>Estado de Entrega:</b> 100% Completo y Validado ✅", body_style)
         ]
     ]
     meta_table = Table(meta_data, colWidths=[270, 270])
@@ -174,141 +140,110 @@ def build_pdf():
         ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#f8fafc")),
         ('BOX', (0, 0), (-1, -1), 1, colors.HexColor("#cbd5e1")),
         ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#e2e8f0")),
-        ('TOPPADDING', (0, 0), (-1, -1), 5),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
-        ('LEFTPADDING', (0, 0), (-1, -1), 8),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+        ('TOPPADDING', (0, 0), (-1, -1), 4),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ('LEFTPADDING', (0, 0), (-1, -1), 7),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 7),
     ]))
     story.append(meta_table)
-    story.append(Spacer(1, 10))
-
-    # ==========================
-    # RESUMEN DE CAMBIOS Y CORRECCIONES
-    # ==========================
-    story.append(Paragraph("1. Resumen de Requerimientos y Cambios Aplicados", h1_style))
-    req_text = (
-        "En cumplimiento con las instrucciones de la práctica, se implementó el backend desde cero "
-        "abarcando las páginas 5 a la 12 del manual con las siguientes adaptaciones clave:<br/>"
-        "• <b>Temática de Videojuegos y Nombre Propio:</b> Se sustituyó el nombre <i>'restaurante'</i> por <b>'PixelVault'</b> "
-        "tanto a nivel de estructura de proyecto en Django como en el título de la documentación interactiva en Swagger UI.<br/>"
-        "• <b>Campo Extra en el Modelo de Usuario:</b> Se extendió <code>AbstractUser</code> incorporando el campo <b><code>gamertag</code></b> "
-        "(apodo/alias gamer). Este campo fue integrado en el Django Admin (listado y formularios), en el <code>UserSerializer</code> y en los esquemas de Swagger.<br/>"
-        "• <b>Tiempo de Vida del Token:</b> Se configuró explícitamente en <code>settings.py</code> la directiva <code>SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'] = timedelta(hours=2)</code>.<br/>"
-        "• <b>Exclusión en Git:</b> El archivo <code>.gitignore</code> excluye de manera estricta el entorno virtual (<code>venv/</code>) y la base de datos (<code>db.sqlite3</code>)."
-    )
-    story.append(Paragraph(req_text, body_style))
     story.append(Spacer(1, 8))
 
-    story.append(Paragraph("2. Análisis y Corrección de Vulnerabilidades del Manual", h1_style))
-    sec_data = [
-        [
-            Paragraph("<b>Vulnerabilidad 1: Fuga de Hash de Contraseñas en la API</b>", h2_style),
-            Paragraph("<b>Vulnerabilidad 2: Sobreescritura de Contraseña en Edición</b>", h2_style)
-        ],
-        [
-            Paragraph(
-                "<b>Problema en el manual:</b> En la página 9 y 11, <code>UserSerializer</code> incluía el campo <code>password</code> sin <code>write_only: True</code>. Esto provocaba que cualquier consulta a <code>/api/v1/users/</code> o a <code>/api/v1/auth/me/</code> retornara el hash completo de la contraseña de los usuarios.<br/>"
-                "<b>Corrección:</b> Se añadió <code>extra_kwargs = {'password': {'write_only': True}}</code> en <code>UserSerializer</code>. DRF omite la contraseña en cualquier respuesta serializada.",
-                body_style
-            ),
-            Paragraph(
-                "<b>Problema en el manual:</b> En la página 10, el método <code>partial_update</code> contenía: <code>else: request.data['password'] = request.user.password</code>. Si un administrador editaba a un usuario sin proveer contraseña, se le asignaba la contraseña del administrador.<br/>"
-                "<b>Corrección:</b> En <code>UserSerializer.update()</code> y en el ViewSet, si la petición no incluye contraseña, esta NO se modifica en la base de datos y permanece 100% inalterada.",
-                body_style
-            )
-        ]
-    ]
-    sec_table = Table(sec_data, colWidths=[270, 270])
-    sec_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (0, -1), colors.HexColor("#fffbeb")),
-        ('BACKGROUND', (1, 0), (1, -1), colors.HexColor("#fef2f2")),
-        ('BOX', (0, 0), (-1, -1), 1, colors.HexColor("#e2e8f0")),
-        ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
-        ('TOPPADDING', (0, 0), (-1, -1), 6),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
-        ('LEFTPADDING', (0, 0), (-1, -1), 8),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 8),
-    ]))
-    story.append(sec_table)
+    # Resumen técnico de requisitos
+    story.append(Paragraph("1. Resumen de Requisitos Implementados", h1_style))
+    resumen_text = (
+        "• <b>Parte 1: Frontend en React (Manual Páginas 13 a 35):</b> Proyecto inicializado con Vite y React 18, "
+        "configuración de Semantic UI React, SASS, sistema modular de rutas con React Router Dom v6 (AdminLayout, "
+        "ClientLayout, CommonLayout), formulario de Login con Formik + Yup + Toastify conectado al backend de JWT, "
+        "persistencia de sesión con AuthContext y useAuth en LocalStorage, y pantalla de Registro de nuevos usuarios.<br/>"
+        "• <b>Parte 2: Integración de API de Terceros (Unidad 3):</b> En el Dashboard protegido se integró un widget "
+        "que consume en tiempo real la API externa gratuita DummyJSON Quotes mediante <code>fetch()</code> asíncrono.<br/>"
+        "• <b>Parte 3: Web Services Propios y Consumo SOAP (Unidad 3):</b> Web Service propio con datos protegidos "
+        "(<code>/api/v1/auth/me/</code> con Bearer Token) y consumo de un Web Service SOAP público (CountryInfoService WSDL) "
+        "en Django mediante la librería <code>zeep</code> a través del endpoint <code>/api/v1/soap/country/</code>."
+    )
+    story.append(Paragraph(resumen_text, body_style))
+    story.append(Spacer(1, 8))
+
+    # CAPTURA 1: LOGIN Y TOKEN
+    story.append(Paragraph("Captura 1: Login Funcionando en React y Consola con Token JWT", h1_style))
+    story.append(Paragraph(
+        "Se observa el formulario de Login en React (<code>http://localhost:5173/login</code>). Al ingresar las credenciales, "
+        "se efectúa la petición POST a <code>/api/v1/auth/token/</code>, obteniendo el token de acceso JWT (código 200 OK) "
+        "el cual se imprime en la consola de desarrollador y se almacena en el LocalStorage para persistir la sesión.",
+        body_style
+    ))
+    story.append(Spacer(1, 4))
+    img1 = os.path.join(SCREENSHOTS_DIR, "ra2_1_login_token.png")
+    if os.path.exists(img1):
+        story.append(RLImage(img1, width=540, height=345))
 
     story.append(PageBreak())
 
     # ==========================
-    # CAPTURAS DE PANTALLA REQUERIDAS
+    # PÁGINA 2: DASHBOARD Y API TERCEROS
     # ==========================
-    story.append(Paragraph("3. Evidencias y Capturas de Funcionamiento", title_style))
-    story.append(Paragraph("Capturas de ejecución del sistema backend, interfaz Swagger y validación de endpoints.", subtitle_style))
-
-    # CAPTURA 1: SWAGGER
-    story.append(Paragraph("Captura 1: Interfaz Swagger UI con los Endpoints y Documentación OpenAPI", h1_style))
+    # CAPTURA 2: DASHBOARD PROTEGIDO
+    story.append(Paragraph("Captura 2: Dashboard Protegido con Nombre de Usuario (AuthContext)", h1_style))
     story.append(Paragraph(
-        "Se muestra la interfaz generada en <code>http://127.0.0.1:8000/swagger/</code> con el título personalizado "
-        "<b>PixelVault Gaming API</b>, los endpoints de autenticación (<code>/auth/me/</code>, <code>/auth/token/</code>, "
-        "<code>/auth/token/refresh/</code>), el CRUD completo de usuarios gamers (<code>/users/</code>) y el esquema con el campo extra <b><code>gamertag</code></b>.",
+        "Ruta protegida <code>/dashboard</code> en React accesible únicamente para usuarios autenticados. "
+        "Gracias al Custom Hook <code>useAuth()</code> y al <code>AuthProvider</code>, se muestran los datos personales "
+        "recuperados desde el endpoint <code>/auth/me/</code> (correo: <b>admin@pixelvault.gg</b>, gamertag: <b>PixelMaster</b>, "
+        "nombre: <b>Admin Pixel</b>), así como la persistencia de la clave <code>TOKEN</code> en LocalStorage.",
         body_style
     ))
     story.append(Spacer(1, 4))
-    img1_path = os.path.join(SCREENSHOTS_DIR, "captura_1_swagger.png")
-    if os.path.exists(img1_path):
-        story.append(RLImage(img1_path, width=540, height=382))
-    story.append(Spacer(1, 14))
+    img2 = os.path.join(SCREENSHOTS_DIR, "ra2_2_dashboard_authcontext.png")
+    if os.path.exists(img2):
+        story.append(RLImage(img2, width=540, height=330))
 
-    # CAPTURA 2: OBTENCIÓN DEL TOKEN
-    story.append(Paragraph("Captura 2: Obtención del Token JWT (Endpoint /api/v1/auth/token/)", h1_style))
+    story.append(Spacer(1, 8))
+
+    # CAPTURA 3: WIDGET API TERCEROS
+    story.append(Paragraph("Captura 3: Widget de API de Terceros Consumido con fetch() en Dashboard", h1_style))
     story.append(Paragraph(
-        "Petición POST con credenciales de usuario (email y contraseña). El servidor responde con código <b>200 OK</b> "
-        "devolviendo el token <b>access</b> y <b>refresh</b>. Se valida la vigencia configurada de <b>2 horas (7,200 segundos)</b> "
-        "para <code>ACCESS_TOKEN_LIFETIME</code>.",
+        "Integración de la Unidad 3: En el Dashboard se muestra la sección dinámica que consulta una frase motivadora gamer "
+        "desde la API externa <code>https://dummyjson.com/quotes/random</code>. En la parte inferior se muestra la pestaña "
+        "Network de las DevTools confirmando la petición <b>fetch / json con código 200 OK</b> conviviendo armónicamente con los endpoints de Django.",
         body_style
     ))
     story.append(Spacer(1, 4))
-    img2_path = os.path.join(SCREENSHOTS_DIR, "captura_2_token.png")
-    if os.path.exists(img2_path):
-        story.append(RLImage(img2_path, width=540, height=333))
+    img3 = os.path.join(SCREENSHOTS_DIR, "ra2_3_third_party_widget.png")
+    if os.path.exists(img3):
+        story.append(RLImage(img3, width=540, height=330))
 
     story.append(PageBreak())
 
-    # CAPTURA 3: DATOS PERSONALES
-    story.append(Paragraph("Captura 3: Consulta de Datos Personales con el Token (Endpoint /api/v1/auth/me/)", h1_style))
+    # ==========================
+    # PÁGINA 3: CONSUMO SOAP Y CONCLUSIONES
+    # ==========================
+    # CAPTURA 4: CONSUMO SOAP CON ZEEP
+    story.append(Paragraph("Captura 4: Consumo de Servicio SOAP Público en Django usando Zeep", h1_style))
     story.append(Paragraph(
-        "Petición GET enviando en la cabecera <code>Authorization: Bearer &lt;token&gt;</code>. La respuesta <b>200 OK</b> "
-        "retorna los datos del usuario gamer autenticado, incluyendo el campo extra <b><code>gamertag: 'PixelMaster'</code></b>. "
-        "<b>Verificación de seguridad:</b> El hash de la contraseña NO aparece en la respuesta, validando la corrección de la vulnerabilidad #1.",
+        "Demostración de la Parte 3 (Unidad 3): Se implementó en Django el endpoint <code>/api/v1/soap/country/</code> "
+        "que consume mediante la librería <code>zeep</code> el servicio SOAP público <b>CountryInfoService (WSDL)</b>. "
+        "Arriba se observa la respuesta JSON devuelta por Django al navegador con los datos de Japón (Tokyo, Yen, código 81) "
+        "y abajo la ejecución de prueba en la terminal de PowerShell consumiendo las operaciones SOAP con éxito.",
         body_style
     ))
     story.append(Spacer(1, 4))
-    img3_path = os.path.join(SCREENSHOTS_DIR, "captura_3_auth_me.png")
-    if os.path.exists(img3_path):
-        story.append(RLImage(img3_path, width=540, height=333))
-    story.append(Spacer(1, 14))
+    img4 = os.path.join(SCREENSHOTS_DIR, "ra2_4_soap_consumption.png")
+    if os.path.exists(img4):
+        story.append(RLImage(img4, width=540, height=345))
 
-    # CAPTURA 4: PRUEBA DE NO SOBREESCRITURA DE CONTRASEÑA
-    story.append(Paragraph("Captura 4: Prueba de que Editar Usuario sin Contraseña NO Modifica su Contraseña", h1_style))
-    story.append(Paragraph(
-        "Demostración de la corrección del fallo crítico del manual. Se actualiza parcialmente (PATCH) el usuario "
-        "<i>'Cloud Strife'</i> modificando solo su <code>gamertag</code> y <code>first_name</code> sin enviar campo <code>password</code>. "
-        "Se comprueba que el hash en base de datos es 100% idéntico, que el usuario puede seguir iniciando sesión con su contraseña original, "
-        "y que el intento de iniciar sesión con la contraseña del administrador es rechazado con <b>401 Unauthorized</b>.",
-        body_style
-    ))
-    story.append(Spacer(1, 4))
-    img4_path = os.path.join(SCREENSHOTS_DIR, "captura_4_seguridad_update.png")
-    if os.path.exists(img4_path):
-        story.append(RLImage(img4_path, width=540, height=382))
+    story.append(Spacer(1, 10))
 
-    story.append(Spacer(1, 12))
-
-    # Conclusión final
-    conclusion_box = [
-        [Paragraph("<b>Conclusión de la Entrega y Verificación Final:</b>", h2_style)],
+    # Conclusión
+    concl_data = [
+        [Paragraph("<b>Conclusión y Validación de la Entrega (Unidad 2 y 3):</b>", h1_style)],
         [Paragraph(
-            "El proyecto <b>PixelVault Gaming API</b> cumple estrictamente con el manual de desarrollo (páginas 5 a 12), "
-            "implementando todas las características solicitadas (nombre propio temático, campo adicional gamer, tiempo de vida del token "
-            "y corrección de las dos fallas de seguridad del manual). Todas las pruebas automatizadas arrojaron un 100% de éxito.",
+            "Se ha completado satisfactoriamente el ciclo full-stack del manual (páginas 13 a 35) y los requerimientos de la Unidad 3: "
+            "Backend Django REST Framework + JWT, Frontend en React con Vite, rutas protegidas con AuthContext, consumo asíncrono "
+            "de una API REST externa de terceros y consumo de un Web Service SOAP público con Zeep. El código completo y actualizado "
+            "se encuentra disponible en el repositorio de GitHub: <b>https://github.com/juanZantillan13/Practica-4</b>.",
             body_style
         )]
     ]
-    t_concl = Table(conclusion_box, colWidths=[540])
+    t_concl = Table(concl_data, colWidths=[540])
     t_concl.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#f0fdf4")),
         ('BOX', (0, 0), (-1, -1), 1, colors.HexColor("#86efac")),
@@ -320,12 +255,12 @@ def build_pdf():
     story.append(t_concl)
 
     doc.build(story, canvasmaker=NumberedCanvas)
-    print(f"PDF generado exitosamente en: {PDF_OUTPUT_PATH}")
+    print(f"PDF generado: {PDF_OUTPUT_PATH}")
 
-    # Copiar también en la raíz del espacio de trabajo
     import shutil
+    shutil.copyfile(PDF_OUTPUT_PATH, PDF_COPY_OLD)
     shutil.copyfile(PDF_OUTPUT_PATH, PDF_ROOT_COPY)
-    print(f"Copia del PDF creada en: {PDF_ROOT_COPY}")
+    print("Copias del PDF actualizadas con éxito.")
 
 
 if __name__ == "__main__":
