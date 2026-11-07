@@ -51,7 +51,7 @@ class NumberedCanvas(canvas.Canvas):
         self.line(36, 42, 576, 42)
         self.setFont("Helvetica", 8)
         self.setFillColor(colors.HexColor("#64748b"))
-        self.drawString(36, 30, "Repositorio GitHub: https://github.com/juanZantillan13/Practica-4")
+        self.drawString(36, 30, "Repositorio GitHub: https://github.com/juanZantillan13/RA-Desarrollo-Web")
         self.drawRightString(576, 30, f"Página {self._pageNumber} de {page_count}")
         self.restoreState()
 
@@ -131,7 +131,7 @@ def build_pdf():
             Paragraph("<b>API de Terceros:</b> DummyJSON Quotes API (en Dashboard)", body_style)
         ],
         [
-            Paragraph("<b>Repositorio GitHub:</b> <font color='#2563eb'><u>https://github.com/juanZantillan13/Practica-4</u></font>", body_style),
+            Paragraph("<b>Repositorio GitHub:</b> <font color='#2563eb'><u>https://github.com/juanZantillan13/RA-Desarrollo-Web</u></font>", body_style),
             Paragraph("<b>Estado de Entrega:</b> 100% Completo y Validado ✅", body_style)
         ]
     ]
@@ -239,7 +239,7 @@ def build_pdf():
             "Se ha completado satisfactoriamente el ciclo full-stack del manual (páginas 13 a 35) y los requerimientos de la Unidad 3: "
             "Backend Django REST Framework + JWT, Frontend en React con Vite, rutas protegidas con AuthContext, consumo asíncrono "
             "de una API REST externa de terceros y consumo de un Web Service SOAP público con Zeep. El código completo y actualizado "
-            "se encuentra disponible en el repositorio de GitHub: <b>https://github.com/juanZantillan13/Practica-4</b>.",
+            "se encuentra disponible en el repositorio de GitHub: <b>https://github.com/juanZantillan13/RA-Desarrollo-Web</b>.",
             body_style
         )]
     ]

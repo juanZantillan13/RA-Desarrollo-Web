@@ -2,7 +2,7 @@
 
 Proyecto Full Stack integral para la plataforma de videojuegos y comunidad **PixelVault**, implementando un Backend en **Django REST Framework** con autenticación JWT y consumo SOAP, y un Frontend moderno en **React (Vite)** siguiendo las **páginas 13 a 35 del manual**.
 
-🔗 **Repositorio Oficial de GitHub:** [https://github.com/juanZantillan13/Practica-4](https://github.com/juanZantillan13/Practica-4)
+🔗 **Repositorio Oficial de GitHub:** [https://github.com/juanZantillan13/RA-Desarrollo-Web](https://github.com/juanZantillan13/RA-Desarrollo-Web)
 
 ---
 
@@ -27,6 +27,7 @@ Este repositorio contiene la solución completa de las **Unidades 2 y 3**:
 
 4. **Documento PDF de Entrega:**
    - [`Reporte_RA2_Django_React_SOAP.pdf`](./Reporte_RA2_Django_React_SOAP.pdf) con las 4 evidencias fotográficas solicitadas (Login con token en consola, Dashboard protegido con AuthContext, Widget de API de Terceros, y Consumo SOAP en terminal y navegador).
+- [Reporte en GitHub](https://github.com/juanZantillan13/RA-Desarrollo-Web/blob/main/Reporte_RA2_Django_React_SOAP.pdf)
 
 ---
 
@@ -103,8 +104,8 @@ pixelvault/
 
 ### 1. Clonar el Repositorio
 ```bash
-git clone https://github.com/juanZantillan13/Practica-4.git
-cd Practica-4
+git clone https://github.com/juanZantillan13/RA-Desarrollo-Web.git
+cd RA-Desarrollo-Web
 ```
 
 ---
